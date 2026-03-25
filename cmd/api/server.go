@@ -37,6 +37,18 @@ func teachersHandler(w http.ResponseWriter, r *http.Request) {
 		userID := strings.TrimSuffix(path, "/")
 		fmt.Println("The ID is:", userID)
 
+		//====Query Parameters=====
+		fmt.Println("Query Params:", r.URL.Query())
+		queryParams := r.URL.Query()
+		sortby := queryParams.Get("sortby")
+		key := queryParams.Get("key")
+		sortorder := queryParams.Get("sortorder")
+
+		if sortorder == "" {
+			sortorder = "DESC"
+		}
+		fmt.Printf("Sortby: %v, Sort Order: %v, Key: %v", sortby, sortorder, key)
+
 		w.Write([]byte("Hello Get Method on Teachers Route"))
 		fmt.Println("Hello Get Method on Teachers Route")
 	case http.MethodPut:
