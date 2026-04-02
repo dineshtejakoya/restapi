@@ -3,8 +3,10 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"golangrestapi/internal/api/middlewares"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 type User struct {
@@ -82,8 +84,10 @@ func execsHandler(w http.ResponseWriter, r *http.Request) {
 }
 func main() {
 	port := ":3000"
-	cert := "../../cert.pem"
-	key := "../../key.pem"
+	cert, _ := filepath.Abs("cert.pem")
+	key, _ := filepath.Abs("key.pem")
+	// cert := "../../cert.pem"
+	// key := "../../key.pem"
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandler)
@@ -101,8 +105,9 @@ func main() {
 
 	//Create custom server
 	server := &http.Server{
-		Addr:    port,
-		Handler: mux,
+		Addr: port,
+		// Handler: mux,
+		Handler: middlewares.SecurityHeaders(mux),
 		// Handler:   nil,
 		TLSConfig: tlsConfig,
 	}
